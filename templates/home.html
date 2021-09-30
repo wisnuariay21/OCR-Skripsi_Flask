@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+  <meta charset="UFT-8">
+  <title>LANSIA READER</title>
+  <link rel="stylesheet" href="static/style.css">
+  <meta name="viewport" content="width=device-witdh, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+  <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" type="text/css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+<!--   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
+</head>
+
+<body onload="myFunction()">
+  <div class="containerbox">
+    <div class="row">
+      <div class="text-center">
+        <div id="loader"></div>
+        <h1>LANSIA READER</h1>
+
+        <form enctype="multipart/form-data" method="post" id="forminput">
+            <input type="file" name="file" id="file" class="input-file">
+            <!-- <input type="file" id="file" class="input-file" accept="image/*" capture /> -->
+            <label for="file" class="btn btn-tertiary js-labelFile">
+              <span id="js-fileName" style="font-size:20px;color:black;"></span>
+              <span id="iconcamera" class="bi bi-camera-fill" style="font-size:28px;color:black;"></span>
+            </label>
+            <br>
+            <button type="submit" class="btn btn-default animated shake" id="buttoninput" style="font-size:20px;">TEKAN TOMBOL DIATAS</button>
+        </form>
+        <br>
+      </div>
+    </div>  
+  </div>
+
+
+<div class="containertext">
+
+    {% if img_src %}
+    <div style="display:none;" onload="showPage()" id="myDiv" class="animate-bottom"></div>
+      <img src="{{ img_src }}">
+    {% endif %}
+
+    {% if extracted_text %}
+    <input type="button" id="increasetext" value="PERBESAR" class="btn btn-default animated shake" style="font-size:20px;"/>
+    <input type="button" id="decreasetext" value="PERKECIL" class="btn btn-default animated shake" style="font-size:20px;"/>
+     <div class="boxdiv">
+       {{ extracted_text }}
+     </div>
+     <!-- <p> RESULT: <b> {{ extracted_text }}</b></p> -->
+    
+     <div>
+      <audio controls id="myAudio">
+        <source src="{{ audio_src }}" type="audio/mpeg">
+      </audio>
+     <!--  <button onclick="playAudio()" type="button" class="btn btn-default animated shake" style="font-size:20px;">PUTAR SUARA</button> -->
+      <br>
+      <br>
+     </div>
+      
+    {% endif %}
+<!--     <img src="../static/files/novel.jpg"> -->
+</div>
+
+
+
+<script type="text/javascript">
+
+  //INPUT FILE
+  (function() {
+  'use strict';
+  $('.input-file').each(function() {
+    var $input = $(this),
+        $label = $input.next('.js-labelFile'),
+        labelVal = $label.html();
+    
+   $input.on('change', function(element) {
+      var fileName = '';
+      if (element.target.value) fileName = element.target.value.split('\\').pop();
+      // fileName ? $label.addClass('has-file').find('.js-fileName').html(fileName) : $label.removeClass('has-file').html(labelVal);
+      document.getElementById('js-fileName').innerText = "FOTO TERAMBIL"
+      document.getElementById('buttoninput').innerText = "TEKAN TOMBOL INI";
+      document.getElementById('iconcamera').remove();
+      });
+    });
+  })();
+
+  //AUDIO PLAY
+  var x = document.getElementById("myAudio"); 
+  function playAudio() { 
+    x.play(); 
+  } 
+
+  //ZOOM IN OUT TEXT
+  $('#increasetext').click(function() {
+    curSize = parseInt($('.boxdiv').css('font-size')) + 2;
+    if (curSize <= 32)
+      $('.boxdiv').css('font-size', curSize);
+  });
+
+  $('#decreasetext').click(function() {
+    curSize = parseInt($('.boxdiv').css('font-size')) - 2;
+    if (curSize >= 14)
+      $('.boxdiv').css('font-size', curSize);
+  });
+
+  //LOADER
+  function myFunction() {
+    document.getElementById("loader").style.display = "none";
+  }
+
+  function showPage() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("myDiv").style.display = "block";
+  }
+
+  function showLoadbar()
+  {
+    document.getElementById("loader").style.display = "block";
+  }
+
+  document.getElementById("forminput").addEventListener("click", function(evt) {
+  var target = evt.target;
+  if(target.id === "buttoninput") 
+  {
+    showLoadbar();
+  } 
+  }, false);
+
+
+
+</script>
+   
+</body>
+</html>
